@@ -1416,25 +1416,6 @@
 <script>
 // Theme toggle
 const html = document.documentElement;
-const toggleBtns = [document.getElementById('themeToggle'), document.getElementById('themeToggleMobile')];
-let isDark = true;
-
-function applyTheme(dark) {
-  isDark = dark;
-  if (dark) {
-    html.removeAttribute('data-theme');
-  } else {
-    html.setAttribute('data-theme', 'light');
-  }
-  const icon = dark ? '🌙' : '☀️';
-  toggleBtns.forEach(btn => { if (btn) btn.textContent = icon; });
-}
-
-toggleBtns.forEach(btn => {
-  if (btn) btn.addEventListener('click', () => applyTheme(!isDark));
-});
-
-applyTheme(true); // default dark
 
 // NAV scroll
 const nav = document.getElementById('navbar');
