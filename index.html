@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumao Digital Solutions – From Maps to The Main Stage</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+  :root {
+    --blue: #1B4FFF;
+    --teal: #00C9A7;
+    --dark: #0A0A14;
+    --surface: #111120;
+    --card: #161628;
+    --border: rgba(255,255,255,0.07);
+    --text: #E8E8F0;
+    --muted: #8888A8;
+    --grad: linear-gradient(135deg, #1B4FFF 0%, #00C9A7 100%);
+    --nav-bg: rgba(10,10,20,.92);
+    --input-bg: rgba(255,255,255,.06);
+    --input-color: #fff;
+  }
+
+  html[data-theme="light"] {
+    --dark: #F4F6FB;
+    --surface: #E9EDF5;
+    --card: #FFFFFF;
+    --border: rgba(0,0,0,0.08);
+    --text: #12121E;
+    --muted: #5A5A7A;
+    --nav-bg: rgba(244,246,251,.95);
+    --input-bg: rgba(0,0,0,.04);
+    --input-color: #12121E;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+    transition: background .3s, color .3s;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: .3;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 900;
+    padding: 18px 0;
+    transition: background .3s, box-shadow .3s;
+  }
+  nav.scrolled {
+    background: var(--nav-bg);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 1px 0 var(--border);
+  }
+  .nav-brand {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: .04em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-brand span { color: var(--teal); }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .88rem;
+    font-weight: 500;
+    margin-left: 32px;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: #fff; }
+  .btn-nav {
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    padding: 9px 22px;
+    border-radius: 6px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: .82rem;
+    letter-spacing: .05em;
+    cursor: pointer;
+    transition: opacity .2s, transform .2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-nav:hover { opacity: .85; transform: translateY(-1px); color: #fff; }
+
+  .theme-toggle {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all .2s;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 120px 0 80px;
+  }
+  .hero-glow {
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(27,79,255,.28) 0%, transparent 70%);
+    top: -150px; right: -200px;
+    pointer-events: none;
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,201,167,.15) 0%, transparent 70%);
+    bottom: -100px; left: -100px;
+    pointer-events: none;
+  }
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+    pointer-events: none;
+  }
+  .badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(27,79,255,.12);
+    border: 1px solid rgba(27,79,255,.3);
+    color: #7fa8ff;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .badge-pill .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .4; transform: scale(1.4); }
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    margin-bottom: 24px;
+  }
+  .hero h1 .highlight {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p.lead {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin-bottom: 40px;
+  }
+  .btn-primary-grad {
+    background: var(--grad);
+    color: #fff;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-primary-grad:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(27,79,255,.4);
+    color: #fff;
+  }
+  .btn-outline-white {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 13px 28px;
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-outline-white:hover {
+    border-color: rgba(255,255,255,.3);
+    background: rgba(255,255,255,.05);
+    color: var(--text);
+  }
+
+  /* ─── STAT BAR ─── */
+  .stat-bar {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 0;
+  }
+  .stat-item { text-align: center; }
+  .stat-item .num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 2.2rem;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-item .label {
+    color: var(--muted);
+    font-size: .82rem;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 90px 0; }
+  .section-label {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    margin-bottom: 18px;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 520px;
+  }
+
+  /* ─── WHY US CARDS ─── */
+  .why-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 30px;
+    height: 100%;
+    transition: border-color .3s, transform .3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .why-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: var(--grad);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .4s;
+  }
+  .why-card:hover { border-color: rgba(27,79,255,.3); transform: translateY(-4px); }
+  .why-card:hover::before { transform: scaleX(1); }
+  .why-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: rgba(27,79,255,.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 18px;
+    color: var(--blue);
+  }
+  .why-card h5 {
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+  }
+  .why-card p {
+    color: var(--muted);
+    font-size: .9rem;
+    margin: 0;
+  }
+
+  /* ─── WEBSITE TYPES TABS ─── */
+  .types-section { background: var(--surface); }
+  .type-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .type-tab {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 9px 20px;
+    border-radius: 100px;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .25s;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .type-tab.active, .type-tab:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #fff;
+  }
+  .type-panel { display: none; }
+  .type-panel.active { display: block; }
+  .type-showcase {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .browser-bar {
+    background: #0d0d1a;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .browser-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .browser-url {
+    background: rgba(255,255,255,.06);
+    border-radius: 6px;
+    padding: 4px 14px;
+    font-size: .75rem;
+    color: var(--muted);
+    margin-left: 10px;
+    flex: 1;
+  }
+  .type-preview {
+    padding: 30px;
+    min-height: 320px;
+    position: relative;
+  }
+  /* Restaurant Preview */
+  .rest-hero { background: linear-gradient(160deg, #1a0a02, #2d1005); border-radius: 12px; padding: 40px 30px; margin-bottom: 20px; text-align: center; }
+  .rest-hero h3 { font-size: 1.8rem; color: #FFD082; margin-bottom: 8px; }
+  .rest-hero p { color: #a08060; font-size: .9rem; }
+  .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .menu-item { background: rgba(255,255,255,.04); border-radius: 10px; padding: 16px; text-align: center; border: 1px solid rgba(255,200,100,.08); }
+  .menu-item .emoji { font-size: 2rem; margin-bottom: 8px; }
+  .menu-item .name { font-size: .8rem; font-weight: 600; color: #FFD082; margin-bottom: 4px; }
+  .menu-item .price { font-size: .85rem; color: var(--teal); font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 700; }
+  /* Clinic Preview */
+  .clinic-header { background: linear-gradient(135deg, #0a1628, #0d2240); border-radius: 12px; padding: 30px; margin-bottom: 16px; display: flex; align-items: center; gap: 20px; }
+  .clinic-logo { width: 54px; height: 54px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+  .clinic-header h3 { font-size: 1.3rem; margin-bottom: 4px; }
+  .clinic-header p { color: var(--muted); font-size: .82rem; margin: 0; }
+  .appt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .appt-card { background: rgba(255,255,255,.04); border-radius: 10px; padding: 14px; border: 1px solid rgba(0,201,167,.1); }
+  .appt-card .doc { font-weight: 600; font-size: .85rem; margin-bottom: 4px; }
+  .appt-card .spec { color: var(--teal); font-size: .75rem; margin-bottom: 8px; }
+  .appt-card .slots { display: flex; gap: 6px; flex-wrap: wrap; }
+  .slot { background: rgba(27,79,255,.15); border: 1px solid rgba(27,79,255,.3); color: #7fa8ff; font-size: .72rem; padding: 3px 8px; border-radius: 4px; cursor: pointer; transition: background .2s; }
+  .slot:hover { background: var(--blue); color: #fff; }
+  /* Real Estate */
+  .prop-hero { background: linear-gradient(160deg, #0a1420, #142035); border-radius: 12px; padding: 30px; margin-bottom: 16px; }
+  .prop-hero h3 { font-size: 1.4rem; margin-bottom: 6px; }
+  .prop-hero p { color: var(--muted); font-size: .85rem; }
+  .prop-filter { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+  .prop-tag { background: rgba(255,255,255,.06); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: .75rem; color: var(--muted); cursor: pointer; transition: all .2s; }
+  .prop-tag.selected, .prop-tag:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .prop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .prop-card { background: rgba(255,255,255,.04); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .prop-img { height: 80px; background: linear-gradient(135deg, #1a2a4a, #2a3a6a); display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+  .prop-info { padding: 10px; }
+  .prop-info .price { font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 800; font-size: .95rem; color: var(--teal); }
+  .prop-info .loc { font-size: .72rem; color: var(--muted); }
+  /* E-Commerce */
+  .shop-bar { background: var(--grad); border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+  .shop-bar span { font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 800; font-size: 1.1rem; }
+  .shop-bar small { font-size: .8rem; opacity: .8; }
+  .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .product-card { background: rgba(255,255,255,.04); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .product-img { height: 70px; display: flex; align-items: center; justify-content: center; font-size: 2rem; background: linear-gradient(135deg, rgba(27,79,255,.1), rgba(0,201,167,.1)); }
+  .product-info { padding: 8px 10px; }
+  .product-info .pname { font-size: .75rem; font-weight: 600; margin-bottom: 4px; }
+  .product-info .pprice { font-family: 'Plus Jakarta Sans',sans-serif; font-size: .85rem; color: var(--teal); font-weight: 700; }
+  .add-btn { display: block; width: 100%; background: rgba(27,79,255,.2); border: none; color: #7fa8ff; font-size: .7rem; font-weight: 600; padding: 6px; cursor: pointer; transition: background .2s; }
+  .add-btn:hover { background: var(--blue); color: #fff; }
+  /* Portfolio */
+  .port-name { font-size: 1.8rem; margin-bottom: 6px; }
+  .port-role { color: var(--teal); font-size: .85rem; margin-bottom: 16px; }
+  .port-projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .port-proj { border-radius: 10px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+  .skills-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .skill-tag { background: rgba(0,201,167,.1); border: 1px solid rgba(0,201,167,.2); color: var(--teal); padding: 4px 10px; border-radius: 4px; font-size: .72rem; font-weight: 600; }
+
+  /* ─── INTERACTIVE FEATURES SECTION ─── */
+  .features-section {}
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    transition: transform .3s, border-color .3s;
+  }
+  .feature-card:hover { transform: translateY(-4px); border-color: rgba(27,79,255,.3); }
+  .feature-demo {
+    padding: 28px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,.02);
+    border-bottom: 1px solid var(--border);
+  }
+  .feature-meta { padding: 22px 24px; }
+  .feature-meta h5 { font-size: 1rem; margin-bottom: 6px; }
+  .feature-meta p { color: var(--muted); font-size: .85rem; margin: 0; }
+
+  /* DEMO: Toggle */
+  .demo-toggle { display: flex; background: rgba(255,255,255,.06); border-radius: 10px; padding: 4px; gap: 4px; }
+  .demo-toggle button { flex: 1; border: none; background: transparent; color: var(--muted); padding: 10px 14px; border-radius: 8px; font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 600; font-size: .82rem; cursor: pointer; transition: all .25s; }
+  .demo-toggle button.on { background: var(--blue); color: #fff; }
+
+  /* DEMO: Range slider */
+  .demo-slider-wrap { width: 100%; }
+  .demo-slider-wrap label { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: .82rem; }
+  .demo-slider-wrap label span { color: var(--teal); font-weight: 700; font-family: 'Plus Jakarta Sans',sans-serif; }
+  input[type=range] { width: 100%; accent-color: var(--blue); }
+
+  /* DEMO: Carousel dots */
+  .demo-carousel { width: 100%; }
+  .carousel-track { border-radius: 10px; overflow: hidden; background: var(--grad); height: 100px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; transition: all .4s; }
+  .carousel-dots { display: flex; gap: 6px; justify-content: center; }
+  .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.2); cursor: pointer; transition: all .3s; }
+  .carousel-dot.active { background: #fff; width: 22px; border-radius: 4px; }
+
+  /* DEMO: Accordion */
+  .demo-accord { width: 100%; }
+  .accord-item { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 6px; overflow: hidden; }
+  .accord-head { padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: .85rem; font-weight: 600; transition: background .2s; }
+  .accord-head:hover { background: rgba(255,255,255,.04); }
+  .accord-head .arrow { transition: transform .3s; color: var(--muted); font-size: .75rem; }
+  .accord-head.open .arrow { transform: rotate(180deg); }
+  .accord-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+  .accord-body-inner { padding: 0 16px 12px; color: var(--muted); font-size: .82rem; }
+
+  /* DEMO: Counter */
+  .counter-demo { text-align: center; }
+  .counter-display { font-family: 'Plus Jakarta Sans',sans-serif; font-size: 3.5rem; font-weight: 800; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 12px; }
+  .counter-btns { display: flex; gap: 10px; justify-content: center; }
+  .counter-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: #fff; font-size: 1.3rem; cursor: pointer; transition: all .2s; }
+  .counter-btn:hover { background: var(--blue); border-color: var(--blue); }
+
+  /* DEMO: Map pin */
+  .map-demo { width: 100%; }
+  .fake-map { background: linear-gradient(135deg, #0d1825, #0a1420); border-radius: 12px; height: 120px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .map-grid-lines { position: absolute; inset: 0; background-image: linear-gradient(rgba(27,79,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(27,79,255,.08) 1px, transparent 1px); background-size: 20px 20px; }
+  .map-pin { position: absolute; display: flex; flex-direction: column; align-items: center; animation: bounce 1.5s infinite; }
+  @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .map-pin .pin-icon { font-size: 1.8rem; }
+  .map-pin .pin-label { background: #fff; color: #000; font-size: .65rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-top: 4px; white-space: nowrap; }
+  .wa-btn { display: flex; align-items: center; gap: 8px; background: #25D366; color: #fff; border: none; border-radius: 8px; padding: 10px 18px; font-weight: 700; font-size: .82rem; cursor: pointer; margin-top: 12px; width: 100%; justify-content: center; transition: opacity .2s; }
+  .wa-btn:hover { opacity: .85; }
+
+  /* DEMO: Review */
+  .review-demo { width: 100%; }
+  .star-row { color: #FFD082; font-size: 1.1rem; margin-bottom: 8px; }
+  .review-text { font-size: .82rem; color: var(--muted); margin-bottom: 10px; }
+  .reviewer { display: flex; align-items: center; gap: 10px; }
+  .reviewer-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 700; color: #fff; }
+  .reviewer-name { font-size: .82rem; font-weight: 600; }
+
+  /* ─── PRICING ─── */
+  .pricing-section { background: var(--surface); }
+  .price-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 30px;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    transition: transform .3s;
+  }
+  .price-card:hover { transform: translateY(-5px); }
+  .price-card.recommended {
+    border-color: var(--blue);
+    background: linear-gradient(160deg, #111228, #0d1030);
+  }
+  .price-card.recommended::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--grad);
+  }
+  .rec-badge {
+    position: absolute;
+    top: 18px; right: 18px;
+    background: var(--grad);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .price-tier { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+  .price-name { font-size: 1.5rem; margin-bottom: 6px; }
+  .price-desc { color: var(--muted); font-size: .85rem; margin-bottom: 24px; }
+  .price-amount { font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 800; font-size: 2.8rem; margin-bottom: 4px; }
+  .price-amount small { font-size: 1rem; color: var(--muted); }
+  .price-note { color: var(--muted); font-size: .78rem; margin-bottom: 28px; }
+  .price-features { list-style: none; padding: 0; margin-bottom: 32px; }
+  .price-features li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: .88rem; color: var(--muted); }
+  .price-features li:last-child { border-bottom: none; }
+  .price-features li .check { color: var(--teal); flex-shrink: 0; margin-top: 2px; }
+  .btn-price {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 13px;
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans',sans-serif;
+    font-weight: 700;
+    font-size: .9rem;
+    cursor: pointer;
+    transition: all .2s;
+    text-decoration: none;
+  }
+  .btn-price-grad { background: var(--grad); color: #fff; border: none; }
+  .btn-price-grad:hover { opacity: .85; color: #fff; }
+  .btn-price-outline { background: transparent; color: var(--text); border: 1px solid rgba(127,127,160,.25); }
+  .btn-price-outline:hover { border-color: rgba(127,127,160,.5); background: rgba(127,127,160,.07); color: var(--text); }
+  .maintenance-banner {
+    background: rgba(0,201,167,.07);
+    border: 1px solid rgba(0,201,167,.2);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .maintenance-banner .icon { font-size: 1.6rem; flex-shrink: 0; }
+  .maintenance-banner h6 { font-size: .9rem; margin-bottom: 4px; }
+  .maintenance-banner p { color: var(--muted); font-size: .82rem; margin: 0; }
+
+  /* ─── ABOUT ─── */
+  .about-section {}
+  .about-img-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-img-block::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(27,79,255,.2), transparent 70%);
+    pointer-events: none;
+  }
+  .exp-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--grad);
+    border-radius: 16px;
+    padding: 20px 30px;
+    margin-bottom: 24px;
+  }
+  .exp-badge .num { font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 800; font-size: 3rem; color: #fff; line-height: 1; }
+  .exp-badge .text { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.8); }
+  .about-feature { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .about-feature:last-child { border-bottom: none; }
+  .about-feature-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(0,201,167,.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; color: var(--teal); }
+  .about-feature-text h6 { font-size: .9rem; margin-bottom: 3px; }
+  .about-feature-text p { color: var(--muted); font-size: .82rem; margin: 0; }
+
+  /* ─── CTA ─── */
+  .cta-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+  .cta-card {
+    background: linear-gradient(135deg, #0e1f5c, #0a2d20);
+    border: 1px solid rgba(27,79,255,.25);
+    border-radius: 24px;
+    padding: 60px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-card::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 500px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(27,79,255,.25), transparent 70%);
+    pointer-events: none;
+  }
+  .cta-card h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 16px; }
+  .cta-card p { color: var(--muted); max-width: 480px; margin: 0 auto 36px; }
+  .wa-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #25D366;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 36px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .wa-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(37,211,102,.3); color: #fff; }
+  .cta-phone { color: var(--muted); font-size: .85rem; margin-top: 18px; }
+  .cta-phone strong { color: var(--text); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    padding: 40px 0 28px;
+  }
+  .footer-brand { font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 800; font-size: 1.1rem; margin-bottom: 8px; }
+  .footer-brand span { color: var(--teal); }
+  .footer-tagline { color: var(--muted); font-size: .82rem; }
+  .footer-link { color: var(--muted); text-decoration: none; font-size: .85rem; transition: color .2s; }
+  .footer-link:hover { color: #fff; }
+  .footer-bottom { border-top: 1px solid var(--border); margin-top: 28px; padding-top: 20px; color: var(--muted); font-size: .78rem; }
+
+  /* ─── ANIMATIONS ─── */
+  .fade-up { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── MOBILE MENU ─── */
+  .hamburger { background: none; border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 6px 10px; cursor: pointer; font-size: 1.1rem; display: none; }
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px);
+    z-index: 890;
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    gap: 6px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: var(--muted); text-decoration: none; padding: 12px 16px; border-radius: 8px; font-weight: 600; font-size: .9rem; transition: all .2s; }
+  .mobile-menu a:hover { background: rgba(127,127,160,.08); color: var(--text); }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: block; }
+    section { padding: 60px 0; }
+    .cta-card { padding: 40px 24px; }
+    .menu-grid, .product-grid, .port-projects { grid-template-columns: 1fr 1fr; }
+    .appt-grid, .prop-grid { grid-template-columns: 1fr; }
+    .type-preview { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a class="nav-brand" href="#">Rumao<span>.</span>Digital</a>
+    <div class="nav-links d-flex align-items-center">
+      <a href="#why">Why Us</a>
+      <a href="#websites">Websites</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#about">About</a>
+      <a href="#contact" class="btn-nav ms-4">Get Free Quote</a>
+      <button class="theme-toggle ms-3" id="themeToggle" title="Toggle light/dark mode">🌙</button>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <button class="theme-toggle" id="themeToggleMobile" title="Toggle light/dark mode">🌙</button>
+      <button class="hamburger" id="hamburger"><i class="bi bi-list"></i></button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#why" onclick="closeMobile()">Why Us</a>
+  <a href="#websites" onclick="closeMobile()">Websites</a>
+  <a href="#features" onclick="closeMobile()">Features</a>
+  <a href="#pricing" onclick="closeMobile()">Pricing</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#contact" onclick="closeMobile()" class="btn-nav text-center mt-2">Get Free Quote</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-grid-bg"></div>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-5 mb-lg-0">
+        <div class="badge-pill fade-up"><span class="dot"></span>Mumbai-Based · Open for Projects</div>
+        <h1 class="fade-up" style="animation-delay:.1s">Bring Your Business From Maps to <span class="highlight">The Main Stage</span></h1>
+        <p class="lead fade-up" style="animation-delay:.2s">Don't let prospective clients slip away to competitors. We engineer high-speed, stunning websites designed specifically to convert local search queries into real revenue.</p>
+        <div class="d-flex flex-wrap gap-3 fade-up" style="animation-delay:.3s">
+          <a href="#contact" class="btn-primary-grad"><i class="bi bi-whatsapp"></i> Claim Free Consultation</a>
+          <a href="#websites" class="btn-outline-white"><i class="bi bi-eye"></i> See Our Work</a>
+        </div>
+      </div>
+      <div class="col-lg-6 fade-up" style="animation-delay:.35s">
+        <div class="about-img-block">
+          <div class="browser-bar mb-0" style="border-radius:12px 12px 0 0; margin:-40px -30px 0; padding:14px 20px;">
+            <div class="browser-dot" style="background:#FF5F57"></div>
+            <div class="browser-dot" style="background:#FEBC2E"></div>
+            <div class="browser-dot" style="background:#28C840"></div>
+            <div class="browser-url">yourbusiness.com</div>
+            <small style="color:var(--muted); font-size:.7rem;">⚡ Fast</small>
+          </div>
+          <div style="background:linear-gradient(135deg,#0a0f2a,#0d1535); margin: 0 -30px; padding:28px 30px 30px; border-radius:0 0 16px 16px;">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <div style="width:50px;height:50px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🏪</div>
+              <div>
+                <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.1rem;">Your Business Name</div>
+                <div style="color:var(--teal);font-size:.78rem;">⭐ 4.9 · Open Now</div>
+              </div>
+              <a href="#contact" class="wa-btn ms-auto" style="width:auto;padding:8px 16px;font-size:.78rem;margin:0">
+                <i class="bi bi-whatsapp"></i> Book Now
+              </a>
+            </div>
+            <div class="row g-2">
+              <div class="col-4"><div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)"><div style="font-size:1.5rem">📍</div><div style="font-size:.7rem;color:var(--muted);margin-top:4px">Location</div></div></div>
+              <div class="col-4"><div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)"><div style="font-size:1.5rem">📞</div><div style="font-size:.7rem;color:var(--muted);margin-top:4px">Call Now</div></div></div>
+              <div class="col-4"><div style="background:rgba(27,79,255,.12);border-radius:10px;padding:14px;text-align:center;border:1px solid rgba(27,79,255,.2)"><div style="font-size:1.5rem">🗓️</div><div style="font-size:.7rem;color:#7fa8ff;margin-top:4px">Book Slot</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT BAR -->
+<div class="stat-bar">
+  <div class="container">
+    <div class="row g-4 text-center">
+      <div class="col-6 col-md-3">
+        <div class="stat-item"><div class="num" data-count="2">0</div><div class="label">Years Experience</div></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item"><div class="num" data-count="30">0</div><div class="label">Websites Delivered</div></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item"><div class="num" data-count="100">0</div><div class="label">% Mobile Responsive</div></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item"><div class="num" data-count="24">0</div><div class="label">Hr WhatsApp Support</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-lg-6 fade-up">
+        <div class="section-label">Why You Need a Website</div>
+        <h2 class="section-title">A Social Media Profile Is <em>Not</em> Enough</h2>
+        <p class="section-sub">While Instagram and WhatsApp are great for chatting, businesses without websites miss out on high-intent buyers searching on Google right now.</p>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3 fade-up">
+        <div class="why-card">
+          <div class="why-icon">🏆</div>
+          <h5>Ultimate Trust & Authority</h5>
+          <p>When a customer is ready to spend big money — booking a banquet, hiring a designer, choosing a clinic — they look for stability. A professional website makes you look established.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 fade-up" style="transition-delay:.1s">
+        <div class="why-card">
+          <div class="why-icon">📍</div>
+          <h5>Climb Google Map Rankings</h5>
+          <p>Google prioritizes local business profiles that have an active website link attached. Adding a website literally helps you rank higher than local competitors on maps.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 fade-up" style="transition-delay:.2s">
+        <div class="why-card">
+          <div class="why-icon">⚡</div>
+          <h5>Complete Automation & Time Saved</h5>
+          <p>Stop repeating your pricing, timing, or capacity rules 50 times over the phone. Let your website display rates, images, and guidelines systematically for you.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 fade-up" style="transition-delay:.3s">
+        <div class="why-card">
+          <div class="why-icon" style="color:var(--teal)">💬</div>
+          <h5>Capture Hot Leads Instantly</h5>
+          <p>Our platforms link directly to your active WhatsApp number. When a user fills out a contact form, it pings your phone directly with their requirements — zero delay.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WEBSITE TYPES -->
+<section id="websites" class="types-section">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-lg-6 fade-up">
+        <div class="section-label">What We Build</div>
+        <h2 class="section-title">Websites for Every Business Type</h2>
+        <p class="section-sub">Tap a category to preview an interactive demo of what your website could look like.</p>
+      </div>
+    </div>
+    <div class="type-tabs fade-up">
+      <button class="type-tab active" onclick="switchType('restaurant')">🍽️ Restaurant / Cafe</button>
+      <button class="type-tab" onclick="switchType('clinic')">🏥 Clinic / Doctor</button>
+      <button class="type-tab" onclick="switchType('realestate')">🏢 Real Estate</button>
+      <button class="type-tab" onclick="switchType('shop')">🛍️ Shop / E-Commerce</button>
+      <button class="type-tab" onclick="switchType('portfolio')">💼 Portfolio / Agency</button>
+    </div>
+
+    <div class="type-showcase fade-up">
+      <div class="browser-bar">
+        <div class="browser-dot" style="background:#FF5F57"></div>
+        <div class="browser-dot" style="background:#FEBC2E"></div>
+        <div class="browser-dot" style="background:#28C840"></div>
+        <div class="browser-url" id="typeUrl">yourrestaurant.com</div>
+      </div>
+
+      <!-- Restaurant -->
+      <div class="type-panel active type-preview" id="panel-restaurant">
+        <div class="rest-hero">
+          <h3>🍛 Spice Garden Restaurant</h3>
+          <p>Authentic Indian Cuisine · Open 11am – 11pm</p>
+        </div>
+        <p class="mb-3" style="color:var(--muted);font-size:.85rem;font-weight:600">🍴 Popular Menu Items</p>
+        <div class="menu-grid">
+          <div class="menu-item"><div class="emoji">🍛</div><div class="name">Butter Chicken</div><div class="price">₹320</div></div>
+          <div class="menu-item"><div class="emoji">🫓</div><div class="name">Garlic Naan</div><div class="price">₹80</div></div>
+          <div class="menu-item"><div class="emoji">🍲</div><div class="name">Dal Makhani</div><div class="price">₹240</div></div>
+        </div>
+        <div class="mt-3 d-flex gap-2">
+          <button class="wa-btn flex-grow-1"><i class="bi bi-whatsapp"></i> Reserve a Table on WhatsApp</button>
+        </div>
+      </div>
+
+      <!-- Clinic -->
+      <div class="type-panel type-preview" id="panel-clinic">
+        <div class="clinic-header">
+          <div class="clinic-logo">🏥</div>
+          <div>
+            <h3>LifeCare Clinic</h3>
+            <p>Multi-Speciality · Virar West, Mumbai</p>
+          </div>
+        </div>
+        <p class="mb-3" style="color:var(--muted);font-size:.85rem;font-weight:600">📅 Book an Appointment — Click a time slot</p>
+        <div class="appt-grid">
+          <div class="appt-card">
+            <div class="doc">Dr. S. Mehta</div>
+            <div class="spec">General Physician</div>
+            <div class="slots">
+              <span class="slot" onclick="selectSlot(this)">9:00 AM</span>
+              <span class="slot" onclick="selectSlot(this)">11:30 AM</span>
+              <span class="slot booked" style="opacity:.3;cursor:default">1:00 PM</span>
+            </div>
+          </div>
+          <div class="appt-card">
+            <div class="doc">Dr. P. Kaur</div>
+            <div class="spec">Dermatologist</div>
+            <div class="slots">
+              <span class="slot" onclick="selectSlot(this)">10:00 AM</span>
+              <span class="slot" onclick="selectSlot(this)">3:00 PM</span>
+              <span class="slot" onclick="selectSlot(this)">5:30 PM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real Estate -->
+      <div class="type-panel type-preview" id="panel-realestate">
+        <div class="prop-hero">
+          <h3>Mumbai Properties</h3>
+          <p>Filter by budget and location</p>
+          <div class="prop-filter">
+            <span class="prop-tag selected" onclick="toggleTag(this)">All</span>
+            <span class="prop-tag" onclick="toggleTag(this)">1 BHK</span>
+            <span class="prop-tag" onclick="toggleTag(this)">2 BHK</span>
+            <span class="prop-tag" onclick="toggleTag(this)">3 BHK</span>
+            <span class="prop-tag" onclick="toggleTag(this)">Commercial</span>
+          </div>
+        </div>
+        <div class="prop-grid">
+          <div class="prop-card"><div class="prop-img">🏙️</div><div class="prop-info"><div class="price">₹45L</div><div class="loc">2 BHK · Virar West</div></div></div>
+          <div class="prop-card"><div class="prop-img">🏢</div><div class="prop-info"><div class="price">₹72L</div><div class="loc">3 BHK · Vasai Road</div></div></div>
+        </div>
+      </div>
+
+      <!-- E-commerce -->
+      <div class="type-panel type-preview" id="panel-shop">
+        <div class="shop-bar">
+          <div><span>StyleHouse Store</span><br><small>Free delivery over ₹500</small></div>
+          <div style="font-size:1.5rem">🛒 <span style="font-size:.85rem;background:rgba(0,0,0,.3);border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center">3</span></div>
+        </div>
+        <div class="product-grid">
+          <div class="product-card"><div class="product-img">👟</div><div class="product-info"><div class="pname">Running Shoes</div><div class="pprice">₹1,299</div></div><button class="add-btn" onclick="this.textContent='✓ Added'">Add to Cart</button></div>
+          <div class="product-card"><div class="product-img">👕</div><div class="product-info"><div class="pname">Cotton Tee</div><div class="pprice">₹449</div></div><button class="add-btn" onclick="this.textContent='✓ Added'">Add to Cart</button></div>
+          <div class="product-card"><div class="product-img">🎒</div><div class="product-info"><div class="pname">Backpack</div><div class="pprice">₹899</div></div><button class="add-btn" onclick="this.textContent='✓ Added'">Add to Cart</button></div>
+        </div>
+      </div>
+
+      <!-- Portfolio -->
+      <div class="type-panel type-preview" id="panel-portfolio">
+        <div class="port-name">Priya Sharma</div>
+        <div class="port-role">⚡ Interior Designer & Visual Consultant</div>
+        <div class="port-projects">
+          <div class="port-proj" style="background:linear-gradient(135deg,#1a2a4a,#2a4a7a)">🛋️</div>
+          <div class="port-proj" style="background:linear-gradient(135deg,#2a1a1a,#4a2a2a)">🏡</div>
+          <div class="port-proj" style="background:linear-gradient(135deg,#0a2a1a,#1a4a2a)">🌿</div>
+        </div>
+        <div class="skills-row">
+          <span class="skill-tag">Interior Design</span>
+          <span class="skill-tag">Space Planning</span>
+          <span class="skill-tag">3D Rendering</span>
+          <span class="skill-tag">Vastu</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTIVE FEATURES -->
+<section id="features" class="features-section">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-lg-6 fade-up">
+        <div class="section-label">Live Feature Demos</div>
+        <h2 class="section-title">Interactive Elements That Convert Visitors</h2>
+        <p class="section-sub">Every feature below can be integrated into your website. Click, toggle, and interact to see them in action.</p>
+      </div>
+    </div>
+    <div class="row g-4">
+
+      <!-- Toggle -->
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="feature-card">
+          <div class="feature-demo">
+            <div class="demo-toggle" style="width:100%">
+              <button class="on" id="t1" onclick="setToggle('t1','t2')">Monthly</button>
+              <button id="t2" onclick="setToggle('t2','t1')">Annually (−20%)</button>
+            </div>
+          </div>
+          <div class="feature-meta">
+            <h5>Pricing Toggle</h5>
+            <p>Let customers switch between billing options or variants without reloading the page.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slider -->
+      <div class="col-md-6 col-lg-4 fade-up" style="transition-delay:.1s">
+        <div class="feature-card">
+          <div class="feature-demo">
+            <div class="demo-slider-wrap" style="width:100%">
+              <label>Guest Count: <span id="guestCount">50</span> guests</label>
+              <input type="range" min="10" max="500" value="50" oninput="document.getElementById('guestCount').textContent=this.value">
+              <div style="margin-top:12px;background:rgba(27,79,255,.1);border-radius:8px;padding:10px;font-size:.8rem;color:var(--teal);text-align:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700">Estimated Quote: ₹<span id="quoteVal">25,000</span></div>
+            </div>
+          </div>
+          <div class="feature-meta">
+            <h5>Live Quote Calculator</h5>
+            <p>Banquet halls, caterers, event planners — let customers self-estimate costs instantly.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carousel -->
+      <div class="col-md-6 col-lg-4 fade-up" style="transition-delay:.2s">
+        <div class="feature-card">
+          <div class="feature-demo">
+            <div class="demo-carousel" style="width:100%">
+              <div class="carousel-track" id="carouselTrack">
+                <span style="color:#fff;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif">Gallery Slide 1 of 4</span>
+              </div>
+              <div class="carousel-dots">
+                <div class="carousel-dot active" onclick="goSlide(0)"></div>
+                <div class="carousel-dot" onclick="goSlide(1)"></div>
+                <div class="carousel-dot" onclick="goSlide(2)"></div>
+                <div class="carousel-dot" onclick="goSlide(3)"></div>
+              </div>
+            </div>
+          </div>
+          <div class="feature-meta">
+            <h5>Image Carousel & Gallery</h5>
+            <p>Showcase your banquet hall, salon, restaurant, or products with smooth sliding galleries.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion -->
+      <div class="col-md-6 col-lg-4 fade-up" style="transition-delay:.1s">
+        <div class="feature-card">
+          <div class="feature-demo" style="align-items:flex-start;">
+            <div class="demo-accord" style="width:100%">
+              <div class="accord-item">
+                <div class="accord-head" onclick="toggleAccord(this)">
+                  What is your delivery time? <span class="arrow">▼</span>
+                </div>
+                <div class="accord-body"><div class="accord-body-inner">We deliver most standard websites within 7–14 working days depending on the complexity of your project.</div></div>
+              </div>
+              <div class="accord-item">
+                <div class="accord-head" onclick="toggleAccord(this)">
+                  Do you offer revisions? <span class="arrow">▼</span>
+                </div>
+                <div class="accord-body"><div class="accord-body-inner">Yes! We offer 3 rounds of free revisions to make sure the final product perfectly matches your vision.</div></div>
+              </div>
+              <div class="accord-item">
+                <div class="accord-head" onclick="toggleAccord(this)">
+                  Is it mobile-friendly? <span class="arrow">▼</span>
+                </div>
+                <div class="accord-body"><div class="accord-body-inner">Every single website we build is 100% responsive and tested across all major devices and screen sizes.</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="feature-meta">
+            <h5>FAQ Accordion</h5>
+            <p>Answer common questions without cluttering the page. Saves customer support time.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Counter -->
+      <div class="col-md-6 col-lg-4 fade-up" style="transition-delay:.2s">
+        <div class="feature-card">
+          <div class="feature-demo">
+            <div class="counter-demo">
+              <div class="counter-display" id="counterDisplay">1</div>
+              <div class="counter-btns">
+                <button class="counter-btn" onclick="changeCount(-1)">−</button>
+                <button class="counter-btn" onclick="changeCount(1)">+</button>
+              </div>
+              <div style="color:var(--muted);font-size:.78rem;margin-top:10px">Quantity selector</div>
+            </div>
+          </div>
+          <div class="feature-meta">
+            <h5>Dynamic Quantity Selectors</h5>
+            <p>Perfect for order forms, booking tickets, or food delivery — live cart updates with zero page reload.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map + WhatsApp -->
+      <div class="col-md-6 col-lg-4 fade-up" style="transition-delay:.3s">
+        <div class="feature-card">
+          <div class="feature-demo" style="flex-direction:column; width:100%">
+            <div class="fake-map" style="width:100%">
+              <div class="map-grid-lines"></div>
+              <div class="map-pin">
+                <span class="pin-icon">📍</span>
+                <span class="pin-label">Your Business Here</span>
+              </div>
+            </div>
+            <button class="wa-btn" style="margin:12px 0 0"><i class="bi bi-whatsapp"></i> Tap to Get Directions on WhatsApp</button>
+          </div>
+          <div class="feature-meta">
+            <h5>Tap-to-Call & WhatsApp Integration</h5>
+            <p>One tap routes customers directly to your WhatsApp or dials your number — no copy-pasting needed.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Review -->
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="feature-card">
+          <div class="feature-demo">
+            <div class="review-demo" style="width:100%">
+              <div class="star-row">★★★★★</div>
+              <div class="review-text">"Best decision we made was getting our website from Rumao. Bookings went up 3x within the first month. Highly recommended!"</div>
+              <div class="reviewer">
+                <div class="reviewer-avatar">R</div>
+                <div>
+                  <div class="reviewer-name">Rakesh Sharma</div>
+                  <div style="color:var(--muted);font-size:.72rem">Owner, Sharma Banquet Hall</div>
+                </div>
+                <div class="ms-auto" style="color:var(--muted);font-size:.7rem">Google Review</div>
+              </div>
+            </div>
+          </div>
+          <div class="feature-meta">
+            <h5>Live Review Management</h5>
+            <p>Display real customer reviews from Google. Social proof that converts skeptical visitors into buyers.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="col-md-6 col-lg-4 fade-up" style="transition-delay:.1s">
+        <div class="feature-card">
+          <div class="feature-demo" style="align-items:flex-start;">
+            <div style="width:100%">
+              <div style="margin-bottom:10px">
+                <label style="font-size:.75rem;color:var(--muted);margin-bottom:4px;display:block">Your Name</label>
+                <input type="text" placeholder="Rahul Mehta" style="width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:#fff;font-size:.85rem;outline:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
+              </div>
+              <div style="margin-bottom:10px">
+                <label style="font-size:.75rem;color:var(--muted);margin-bottom:4px;display:block">Requirement</label>
+                <textarea rows="2" placeholder="I need a website for my salon..." style="width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:#fff;font-size:.85rem;outline:none;resize:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+              </div>
+              <button onclick="this.textContent='✅ Sent to WhatsApp!';this.style.background='#25D366'" style="width:100%;background:var(--blue);border:none;border-radius:8px;padding:10px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .3s">Submit Enquiry</button>
+            </div>
+          </div>
+          <div class="feature-meta">
+            <h5>Smart Lead Capture Form</h5>
+            <p>Every form submission pings your WhatsApp directly. Never miss a hot lead again.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking / Calendar -->
+      <div class="col-md-6 col-lg-4 fade-up" style="transition-delay:.2s">
+        <div class="feature-card">
+          <div class="feature-demo">
+            <div style="width:100%">
+              <div style="font-size:.78rem;color:var(--muted);margin-bottom:10px;text-align:center">June 2026 · Select a date</div>
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center">
+                <div style="font-size:.65rem;color:var(--muted);padding:4px">Mo</div>
+                <div style="font-size:.65rem;color:var(--muted);padding:4px">Tu</div>
+                <div style="font-size:.65rem;color:var(--muted);padding:4px">We</div>
+                <div style="font-size:.65rem;color:var(--muted);padding:4px">Th</div>
+                <div style="font-size:.65rem;color:var(--muted);padding:4px">Fr</div>
+                <div style="font-size:.65rem;color:var(--muted);padding:4px">Sa</div>
+                <div style="font-size:.65rem;color:var(--muted);padding:4px">Su</div>
+                <div style="font-size:.7rem;color:var(--muted);padding:5px"></div>
+                <div style="font-size:.7rem;color:var(--muted);padding:5px"></div>
+                <div style="font-size:.7rem;color:var(--muted);padding:5px"></div>
+                <div style="font-size:.7rem;color:var(--muted);padding:5px"></div>
+                <div style="font-size:.7rem;color:var(--muted);padding:5px"></div>
+                <div style="font-size:.7rem;color:var(--muted);padding:5px"></div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;background:rgba(255,255,255,.05);cursor:pointer" onclick="this.style.background='var(--blue)'">1</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;cursor:pointer;color:var(--muted)" onclick="this.style.background='var(--blue)';this.style.color='#fff'">2</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;cursor:pointer;color:var(--muted)" onclick="this.style.background='var(--blue)';this.style.color='#fff'">3</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;cursor:pointer;color:var(--muted)" onclick="this.style.background='var(--blue)';this.style.color='#fff'">4</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;background:var(--teal);color:#000;font-weight:700">5</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;cursor:pointer;color:var(--muted)" onclick="this.style.background='var(--blue)';this.style.color='#fff'">6</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;cursor:pointer;color:var(--muted)" onclick="this.style.background='var(--blue)';this.style.color='#fff'">7</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;cursor:pointer;color:var(--muted)" onclick="this.style.background='var(--blue)';this.style.color='#fff'">8</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;cursor:pointer;color:var(--muted)" onclick="this.style.background='var(--blue)';this.style.color='#fff'">9</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;cursor:pointer;color:var(--muted)" onclick="this.style.background='var(--blue)';this.style.color='#fff'">10</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;cursor:pointer;color:var(--muted)" onclick="this.style.background='var(--blue)';this.style.color='#fff'">11</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;cursor:pointer;opacity:.3">12</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;cursor:pointer;opacity:.3">13</div>
+                <div style="font-size:.7rem;padding:5px;border-radius:50%;cursor:pointer;color:var(--muted)" onclick="this.style.background='var(--blue)';this.style.color='#fff'">14</div>
+              </div>
+            </div>
+          </div>
+          <div class="feature-meta">
+            <h5>Event & Booking Calendar</h5>
+            <p>Let customers pick available dates for banquets, salons, clinics, or events directly from the website.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="pricing-section">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-lg-6 fade-up">
+        <div class="section-label">Transparent Investment</div>
+        <h2 class="section-title">Fixed-Rate Packages. No Surprises.</h2>
+        <p class="section-sub">No overwhelming tech talk or hidden enterprise cost sheets. Choose the perfect stage for your current scale.</p>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-md-4 fade-up">
+        <div class="price-card">
+          <div class="price-tier">Starter</div>
+          <h3 class="price-name">Static Elite</h3>
+          <p class="price-desc">Stunning Digital Catalog Showcase</p>
+          <div class="price-amount">₹10,000 <small>onwards</small></div>
+          <div class="price-note">One-Time Development Fee</div>
+          <ul class="price-features">
+            <li><i class="bi bi-check-lg check"></i> Up to 5 Fully Configured Pages</li>
+            <li><i class="bi bi-check-lg check"></i> 100% Smartphone / Mobile Responsive</li>
+            <li><i class="bi bi-check-lg check"></i> Interactive Image Carousel & Gallery</li>
+            <li><i class="bi bi-check-lg check"></i> Direct "Tap-To-Call" & Map Routing</li>
+            <li><i class="bi bi-check-lg check"></i> WhatsApp Query System Integration</li>
+            <li><i class="bi bi-check-lg check"></i> Free SSL Security Setup</li>
+          </ul>
+          <a href="#contact" class="btn-price btn-price-outline">Get Started</a>
+        </div>
+      </div>
+      <div class="col-md-4 fade-up" style="transition-delay:.1s">
+        <div class="price-card recommended">
+          <div class="rec-badge">Recommended</div>
+          <div class="price-tier">Professional</div>
+          <h3 class="price-name">Dynamic Control Pro</h3>
+          <p class="price-desc">Total Business Content Management</p>
+          <div class="price-amount">₹25,000 <small>onwards</small></div>
+          <div class="price-note">Based on Custom Feature Blueprints</div>
+          <ul class="price-features">
+            <li><i class="bi bi-check-lg check"></i> Everything inside Static Elite +</li>
+            <li><i class="bi bi-check-lg check"></i> Admin Dashboard Panel Access</li>
+            <li><i class="bi bi-check-lg check"></i> Update Images & Menus Yourself, Anytime</li>
+            <li><i class="bi bi-check-lg check"></i> Live Customer Review Management Box</li>
+            <li><i class="bi bi-check-lg check"></i> Dynamic Event / Product Booking Interface</li>
+            <li><i class="bi bi-check-lg check"></i> Google Maps Search Engine Boost</li>
+          </ul>
+          <a href="#contact" class="btn-price btn-price-grad">Get Started</a>
+        </div>
+      </div>
+      <div class="col-md-4 fade-up" style="transition-delay:.2s">
+        <div class="price-card">
+          <div class="price-tier">Enterprise</div>
+          <h3 class="price-name">Custom Software & Apps</h3>
+          <p class="price-desc">Advanced Engineering & Mobile Applications</p>
+          <div class="price-amount" style="font-size:1.8rem">₹24,999+</div>
+          <div class="price-note">Custom Project Estimation</div>
+          <ul class="price-features">
+            <li><i class="bi bi-check-lg check"></i> Native Android Play Store Applications</li>
+            <li><i class="bi bi-check-lg check"></i> Android Push Notifications</li>
+            <li><i class="bi bi-check-lg check"></i> Full-Scale Cloud Web Applications</li>
+            <li><i class="bi bi-check-lg check"></i> Multi-User Booking Ledgers</li>
+            <li><i class="bi bi-check-lg check"></i> Stock Management Dashboards</li>
+            <li><i class="bi bi-check-lg check"></i> Custom Customer Portals</li>
+          </ul>
+          <a href="#contact" class="btn-price btn-price-outline">Get a Quote</a>
+        </div>
+      </div>
+    </div>
+    <div class="maintenance-banner fade-up">
+      <div class="icon">🛡️</div>
+      <div>
+        <h6>Routine Maintenance & Protection Shield</h6>
+        <p><strong style="color:var(--teal)">First Year Is 100% Free!</strong> Thereafter, a small maintenance renewal of just ₹2,000/year covers routine adjustments like swapping seasonal images, modifying text content, and keeping core security & local Google SEO completely optimized.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about-section">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5 fade-up">
+        <div class="about-img-block">
+          <div class="exp-badge">
+            <span class="num">2+</span>
+            <span class="text">Years of Experience</span>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon">⚡</div>
+            <div class="about-feature-text">
+              <h6>High-Speed Delivery</h6>
+              <p>Most projects delivered in 7–14 working days with daily progress updates.</p>
+            </div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon">📱</div>
+            <div class="about-feature-text">
+              <h6>Mobile-First Approach</h6>
+              <p>Every site is built mobile-first since 80%+ of your customers browse on phones.</p>
+            </div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon">🔒</div>
+            <div class="about-feature-text">
+              <h6>Security & SEO Included</h6>
+              <p>Free SSL setup and local Google SEO optimization baked into every project.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7 fade-up" style="transition-delay:.15s">
+        <div class="section-label">About Rumao Digital Solutions</div>
+        <h2 class="section-title">Mumbai's Trusted Digital Growth Partner</h2>
+        <p style="color:var(--muted);margin-bottom:20px">We are a Mumbai-based digital solutions agency with over 2 years of hands-on experience building revenue-generating websites for local businesses across all industries.</p>
+        <p style="color:var(--muted);margin-bottom:32px">From restaurants in Virar to clinics in Vasai, real estate brokers in Navi Mumbai to boutiques in Thane — we understand what local businesses need: a website that actually brings in customers, not just looks pretty.</p>
+        <div class="row g-3">
+          <div class="col-6">
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;">
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.8rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">30+</div>
+              <div style="color:var(--muted);font-size:.8rem">Businesses Launched</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;">
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.8rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">5★</div>
+              <div style="color:var(--muted);font-size:.8rem">Average Client Rating</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" class="cta-section">
+  <div class="container">
+    <div class="cta-card fade-up">
+      <div class="badge-pill justify-content-center mx-auto mb-4" style="width:fit-content"><span class="dot"></span>Check Domain Availability Now</div>
+      <h2>Ready to Claim Your Premium Online Identity?</h2>
+      <p>We treat every digital rollout meticulously. Contact us right now via WhatsApp to check if your desired business domain address (.com / .in) is currently available!</p>
+      <div class="d-flex flex-wrap gap-3 justify-content-center">
+        <a href="https://wa.me/917875206538?text=Hi%2C%20I%20saw%20your%20brochure%20and%20would%20like%20a%20free%20consultation!" target="_blank" class="wa-cta-btn">
+          <i class="bi bi-whatsapp" style="font-size:1.2rem"></i> Tap to Text Us on WhatsApp
+        </a>
+      </div>
+      <p class="cta-phone">Direct Hotline: <strong>+91 7875206538</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="row align-items-center mb-4">
+      <div class="col-md-4 mb-4 mb-md-0">
+        <div class="footer-brand">Rumao<span>.</span>Digital</div>
+        <div class="footer-tagline">Bring Your Business From Maps to The Main Stage.</div>
+      </div>
+      <div class="col-md-4 mb-4 mb-md-0">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="#why" class="footer-link">Why a Website?</a>
+          <a href="#websites" class="footer-link">Website Types</a>
+          <a href="#features" class="footer-link">Features</a>
+          <a href="#pricing" class="footer-link">Pricing</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="color:var(--muted);font-size:.85rem;margin-bottom:6px">📞 +91 7875206538</div>
+        <a href="https://wa.me/917875206538" target="_blank" class="wa-btn" style="width:auto;display:inline-flex">
+          <i class="bi bi-whatsapp"></i> WhatsApp Us
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex flex-wrap justify-content-between gap-2">
+      <span>© 2026 Rumao Digital Solutions. All rights reserved.</span>
+      <span>Growth Brochure · Official 2026 Edition</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Theme toggle
+const html = document.documentElement;
+const toggleBtns = [document.getElementById('themeToggle'), document.getElementById('themeToggleMobile')];
+let isDark = true;
+
+function applyTheme(dark) {
+  isDark = dark;
+  if (dark) {
+    html.removeAttribute('data-theme');
+  } else {
+    html.setAttribute('data-theme', 'light');
+  }
+  const icon = dark ? '🌙' : '☀️';
+  toggleBtns.forEach(btn => { if (btn) btn.textContent = icon; });
+}
+
+toggleBtns.forEach(btn => {
+  if (btn) btn.addEventListener('click', () => applyTheme(!isDark));
+});
+
+applyTheme(true); // default dark
+
+// NAV scroll
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Mobile menu
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  mobileMenu.classList.toggle('open');
+  hamburger.innerHTML = mobileMenu.classList.contains('open')
+    ? '<i class="bi bi-x-lg"></i>' : '<i class="bi bi-list"></i>';
+});
+function closeMobile() {
+  mobileMenu.classList.remove('open');
+  hamburger.innerHTML = '<i class="bi bi-list"></i>';
+}
+
+// Count-up animation
+function animateCounters() {
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    let current = 0;
+    const increment = target / 50;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = Math.round(current) + (el.parentElement.querySelector('.label').textContent.includes('%') ? '' : '');
+    }, 30);
+  });
+}
+let countersAnimated = false;
+
+// Fade up observer
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      if (!countersAnimated && e.target.closest('.stat-bar')) {
+        countersAnimated = true;
+        animateCounters();
+      }
+    }
+  });
+}, { threshold: 0 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Fallback: if observer doesn't fire (sandboxed iframe), show everything after 300ms
+setTimeout(() => {
+  document.querySelectorAll('.fade-up:not(.visible)').forEach(el => el.classList.add('visible'));
+  if (!countersAnimated) { countersAnimated = true; animateCounters(); }
+}, 300);
+
+// Type tabs
+const typeUrls = {
+  restaurant: 'yourrestaurant.com',
+  clinic: 'lifecareclinic.in',
+  realestate: 'mumbaiproperties.in',
+  shop: 'stylehouse.in',
+  portfolio: 'priyasharma.design'
+};
+function switchType(type) {
+  document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.type-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel-' + type).classList.add('active');
+  document.getElementById('typeUrl').textContent = typeUrls[type];
+}
+
+// Toggle
+function setToggle(onId, offId) {
+  document.getElementById(onId).classList.add('on');
+  document.getElementById(offId).classList.remove('on');
+}
+
+// Range slider → quote
+document.querySelector('input[type=range]').addEventListener('input', function() {
+  const guests = parseInt(this.value);
+  const quote = Math.round(guests * 500 / 100) * 100;
+  document.getElementById('quoteVal').textContent = quote.toLocaleString('en-IN');
+});
+
+// Carousel
+let currentSlide = 0;
+const slides = [
+  { text: 'Gallery Slide 1 of 4', bg: 'linear-gradient(135deg,#1B4FFF,#00C9A7)' },
+  { text: 'Gallery Slide 2 of 4', bg: 'linear-gradient(135deg,#FF6B6B,#FF8E53)' },
+  { text: 'Gallery Slide 3 of 4', bg: 'linear-gradient(135deg,#A855F7,#EC4899)' },
+  { text: 'Gallery Slide 4 of 4', bg: 'linear-gradient(135deg,#10B981,#059669)' }
+];
+function goSlide(n) {
+  currentSlide = n;
+  const track = document.getElementById('carouselTrack');
+  track.style.background = slides[n].bg;
+  track.querySelector('span').textContent = slides[n].text;
+  document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === n));
+}
+setInterval(() => goSlide((currentSlide + 1) % 4), 2500);
+
+// Accordion
+function toggleAccord(head) {
+  const body = head.nextElementSibling;
+  const isOpen = head.classList.contains('open');
+  document.querySelectorAll('.accord-head').forEach(h => {
+    h.classList.remove('open');
+    h.nextElementSibling.style.maxHeight = '0';
+  });
+  if (!isOpen) {
+    head.classList.add('open');
+    body.style.maxHeight = body.scrollHeight + 'px';
+  }
+}
+
+// Counter
+let count = 1;
+function changeCount(delta) {
+  count = Math.max(1, count + delta);
+  document.getElementById('counterDisplay').textContent = count;
+}
+
+// Slot select
+function selectSlot(el) {
+  el.closest('.appt-card').querySelectorAll('.slot').forEach(s => {
+    s.style.background = '';
+    s.style.color = '';
+  });
+  el.style.background = 'var(--blue)';
+  el.style.color = '#fff';
+}
+
+// Tag toggle
+function toggleTag(el) {
+  el.classList.toggle('selected');
+}
+</script>
+</body>
+</html>
